@@ -20,25 +20,57 @@ def sortListByFonctionSort(list):
     list.sort()
     return list
 
-def sortListBySelection(list):
+def sortListBySelection(listToSort):
     listSorted = []
-    for j in range(len(list)):
+    for j in range(len(listToSort)):
         min = j
-        for i in range(j+1 , len(list)):
-            if (list[i] < list[min]):
+        for i in range(j+1 , len(listToSort)):
+            if (listToSort[i] < listToSort[min]):
                 min         =   i
         if j != min:
-            temp        =   list[j]
-            list[j]     =   list[min]
-            list[min]   =   temp
-    return list
+            temp        =   listToSort[j]
+            listToSort[j]     =   listToSort[min]
+            listToSort[min]   =   temp
+    return listToSort
+
+def sortListByHeap(listToSort):
+    def swap(i, j):
+        listToSort[i], listToSort[j] = listToSort[j], listToSort[i]
+
+    def heapify(end,i):
+        l = 2 * i + 1
+        r = 2 * (i + 1)
+        max=i
+        if l < end and listToSort[i] < listToSort[l]:
+            max = l
+        if r < end and listToSort[max] < listToSort[r]:
+            max = r
+        if max != i:
+            swap(i, max)
+            heapify(end, max)
+
+    end = len(listToSort)
+    start = end // 2 - 1
+    for i in range(start, -1, -1):
+        heapify(end, i)
+    for i in range(end-1, 0, -1):
+        swap(i, 0)
+        heapify(i, 0)
+
+    return listToSort
+
+
+
+
+
 
 #-----------------------------------------------------
 
 #Execution of test-----------------------------------------------------
 
-for i in range(10,10000,1000):
+for i in range(1, 10000,1000):
     print(getTimeOfRunFunction(sortListByFonctionSort,createRandomList(i)))
     print(getTimeOfRunFunction(sortListBySelection,createRandomList(i)))
+    print(getTimeOfRunFunction(sortListByHeap,createRandomList(i)))
 
 os.system("pause")
