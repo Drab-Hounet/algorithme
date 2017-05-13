@@ -1,6 +1,7 @@
 from random import *
 import time
 import os
+import unittest
 
 
 #Definition of functions------------------------------
@@ -85,12 +86,31 @@ def sortListByBubble(listToSort, **args):
 for i in range(10, 10000, 1000):
 
     print("1 " + getTimeOfRunFunction(sortListByFonctionSort,   listToSort = createRandomList(i), size = i))
-    print("2 " + getTimeOfRunFunction(sortListBySelection,      listToSort = createRandomList(i), size = i))
-    print("3 " + getTimeOfRunFunction(sortListByHeap,           listToSort = createRandomList(i), size = i))
-    print("4 " + getTimeOfRunFunction(sortListByBubble,         listToSort = createRandomList(i), size = i, optimised = True))
-    print("5 " + getTimeOfRunFunction(sortListByBubble,         listToSort = createRandomList(i), size = i, optimised = False))
+    # print("2 " + getTimeOfRunFunction(sortListBySelection,      listToSort = createRandomList(i), size = i))
+    # print("3 " + getTimeOfRunFunction(sortListByHeap,           listToSort = createRandomList(i), size = i))
+    # print("4 " + getTimeOfRunFunction(sortListByBubble,         listToSort = createRandomList(i), size = i, optimised = True))
+    # print("5 " + getTimeOfRunFunction(sortListByBubble,         listToSort = createRandomList(i), size = i, optimised = False))
 
     print("\n")
 
 
 os.system("pause")
+
+#-----------------------------------------------------
+
+class TestSort(unittest.TestCase):
+
+    def testSortListByFonctionSort(self):
+        self.assertEqual(sortListByFonctionSort([10,9,8,5,7,6,2,1,3,4]),[1,2,3,4,5,6,7,8,9,10])
+
+    def testSortListBySelection(self):
+        self.assertEqual(sortListBySelection([10,9,8,5,7,6,2,1,3,4]),[1,2,3,4,5,6,7,8,9,10])
+
+    def testSortListByHeap(self):
+        self.assertEqual(sortListByHeap([10,9,8,5,7,6,2,1,3,4]),[1,2,3,4,5,6,7,8,9,10])
+
+    def testSortListByBubbleNotOptimised(self):
+        self.assertEqual(sortListByBubble([10,9,8,5,7,6,2,1,3,4], optimised = False),[1,2,3,4,5,6,7,8,9,10])
+
+    def testSortListByBubbleOptimised(self):
+        self.assertEqual(sortListByBubble([10,9,8,5,7,6,2,1,3,4], optimised = True),[1,2,3,4,5,6,7,8,9,10])
