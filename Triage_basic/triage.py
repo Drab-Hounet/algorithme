@@ -2,41 +2,45 @@ from random import *
 import time
 import os
 
+
 #Definition of functions------------------------------
 
 def createRandomList(size):
     listToSort = []
     for i in range(size):
         listToSort.append(randint(0, 100))
-    return listToSort, size
-
-def getTimeOfRunFunction(function, list):
-    startTime       =       time.time()
-    function(list[0])
-    stopTime        =       time.time()
-    return str(function.__name__) + ": time to sort a list of {} elements : {} secondes\n".format(list[1],str(stopTime - startTime))
-
-def sortListByFonctionSort(list):
-    list.sort()
-    return list
-
-def sortListBySelection(listToSort):
-    listSorted = []
-    for j in range(len(listToSort)):
-        min = j
-        for i in range(j+1 , len(listToSort)):
-            if (listToSort[i] < listToSort[min]):
-                min         =   i
-        if j != min:
-            temp        =   listToSort[j]
-            listToSort[j]     =   listToSort[min]
-            listToSort[min]   =   temp
+    # print (listToSort)
     return listToSort
 
-def sortListByHeap(listToSort):
-    def swap(i, j):
-        listToSort[i], listToSort[j] = listToSort[j], listToSort[i]
+def getTimeOfRunFunction(function, **args):
+    listToSort      = args.get("listToSort")
+    size            = args.get("size")
+    optimised       = args.get("optimised")
 
+    startTime       = time.time()
+    function(listToSort, optimised = optimised)
+    stopTime        = time.time()
+    return str(function.__name__) + ": time to sort a list of {} elements : {} secondes\n".format(size, str(stopTime - startTime))
+
+def sortListByFonctionSort(listToSort, **args):
+    listToSort.sort()
+    return listToSort
+
+def swap(list, index1, index2):
+    list[index1], list[index2] = list[index2], list[index1]
+
+def sortListBySelection(listToSort, **args):
+    for j in range(len(listToSort)):
+        indexMin = j
+        for i in range(j+1 , len(listToSort)):
+            if (listToSort[i] < listToSort[indexMin]):
+                indexMin         =   i
+        if j != indexMin:
+            swap(listToSort, j, indexMin)
+    # print (listToSort)
+    return listToSort
+
+def sortListByHeap(listToSort, **args):
     def heapify(end,i):
         l = 2 * i + 1
         r = 2 * (i + 1)
@@ -46,7 +50,7 @@ def sortListByHeap(listToSort):
         if r < end and listToSort[max] < listToSort[r]:
             max = r
         if max != i:
-            swap(i, max)
+            swap(listToSort, i, max)
             heapify(end, max)
 
     end = len(listToSort)
@@ -54,23 +58,39 @@ def sortListByHeap(listToSort):
     for i in range(start, -1, -1):
         heapify(end, i)
     for i in range(end-1, 0, -1):
-        swap(i, 0)
+        swap(listToSort, i, 0)
         heapify(i, 0)
-
+    # print (listToSort)
     return listToSort
 
-
-
-
-
+def sortListByBubble(listToSort, **args):
+    optimised = args.get("optimised")
+    for i in range(len(listToSort)):
+        tabSorted = optimised
+        for j in range(len(listToSort) - i):
+            if (j < (len(listToSort) - 1)):
+                if (listToSort[j] > listToSort[j + 1]):
+                    swap(listToSort, j , j + 1)
+                    tabSorted = False
+        if (tabSorted):
+            break
+    # print (listToSort)
+    return listToSort
 
 #-----------------------------------------------------
 
 #Execution of test-----------------------------------------------------
+# for h in range(1):
+#     i = 50000
+for i in range(10, 10000, 1000):
 
-for i in range(1, 10000,1000):
-    print(getTimeOfRunFunction(sortListByFonctionSort,createRandomList(i)))
-    print(getTimeOfRunFunction(sortListBySelection,createRandomList(i)))
-    print(getTimeOfRunFunction(sortListByHeap,createRandomList(i)))
+    print("1 " + getTimeOfRunFunction(sortListByFonctionSort,   listToSort = createRandomList(i), size = i))
+    print("2 " + getTimeOfRunFunction(sortListBySelection,      listToSort = createRandomList(i), size = i))
+    print("3 " + getTimeOfRunFunction(sortListByHeap,           listToSort = createRandomList(i), size = i))
+    print("4 " + getTimeOfRunFunction(sortListByBubble,         listToSort = createRandomList(i), size = i, optimised = True))
+    print("5 " + getTimeOfRunFunction(sortListByBubble,         listToSort = createRandomList(i), size = i, optimised = False))
+
+    print("\n")
+
 
 os.system("pause")
