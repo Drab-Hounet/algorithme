@@ -1,10 +1,7 @@
-from random import *
 import time
 import copy
-import os
-import unittest
 
-class List:
+class AlgoList:
 
     def __init__(self, listToSort):
         self.listToSort = listToSort
@@ -87,61 +84,4 @@ class List:
             self.sortListByBubble(optimised = args.get("optimised"))
 
         stopTime        = time.time()
-        return args.get("method") + " : time to sort a list of {} elements : {} secondes\n".format(args.get("size"), str(stopTime - startTime)) + "\n"
-
-
-
-
-#Definition of functions------------------------------
-
-def createRandomList(size):
-    listToSort = []
-    for i in range(size):
-        listToSort.append(randint(0, 100))
-    # print (listToSort)
-    return listToSort
-
-#-----------------------------------------------------
-
-# for h in range(1):
-    i = 100
-for i in range(10, 10000, 1000):
-
-    listToSort1 = List(createRandomList(i))
-    listToSort2 = copy.deepcopy(listToSort1)
-    listToSort3 = copy.deepcopy(listToSort1)
-    listToSort4 = copy.deepcopy(listToSort1)
-    listToSort5 = copy.deepcopy(listToSort1)
-
-    # listToSort1.get()
-    print(listToSort1.getTimeOfRunFunction(method = "sortListByFonctionSort",   size = i))
-    # listToSort2.get()
-    print(listToSort2.getTimeOfRunFunction(method = "sortListBySelection",      size = i))
-    # listToSort3.get()
-    print(listToSort3.getTimeOfRunFunction(method = "sortListByHeap",           size = i))
-    # listToSort4.get()
-    print(listToSort4.getTimeOfRunFunction(method = "sortListByBubble",         size = i , optimised = False))
-    # listToSort4.get()
-    print(listToSort5.getTimeOfRunFunction(method = "sortListByBubble",         size = i , optimised = True))
-
-
-os.system("pause")
-
-#-----------------------------------------------------
-
-class TestSort(unittest.TestCase):
-
-    def testSortListByFonctionSort(self):
-        self.assertEqual(sortListByFonctionSort([10,9,8,5,7,6,2,1,3,4]),[1,2,3,4,5,6,7,8,9,10])
-
-    def testSortListBySelection(self):
-        self.assertEqual(sortListBySelection([10,9,8,5,7,6,2,1,3,4]),[1,2,3,4,5,6,7,8,9,10])
-
-    def testSortListByHeap(self):
-        self.assertEqual(sortListByHeap([10,9,8,5,7,6,2,1,3,4]),[1,2,3,4,5,6,7,8,9,10])
-
-    def testSortListByBubbleNotOptimised(self):
-        self.assertEqual(sortListByBubble([10,9,8,5,7,6,2,1,3,4], optimised = False),[1,2,3,4,5,6,7,8,9,10])
-
-    def testSortListByBubbleOptimised(self):
-        self.assertEqual(sortListByBubble([10,9,8,5,7,6,2,1,3,4], optimised = True),[1,2,3,4,5,6,7,8,9,10])
+        return args.get("method") + " : time to sort a list of {} elements : {} secondes\n".format(args.get("size"), str(stopTime - startTime))
