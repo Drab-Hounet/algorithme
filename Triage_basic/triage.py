@@ -67,7 +67,7 @@ class AlgoList:
 
     def getTimeOfRunFunction(self, **args):
 
-        startTime       = time.time()
+        startTime = time.time()
         if(args.get("method") == "sortListByFonctionSort"):
             self.sortListByFonctionSort()
 
@@ -82,6 +82,7 @@ class AlgoList:
 
         elif(args.get("method") == "sortListByBubble"):
             self.sortListByBubble(optimised = args.get("optimised"))
+        stopTime = time.time()
+        # print(args.get("method") + " : time to sort a list of {} elements : {} secondes\n".format(args.get("size"), str(stopTime - startTime)))
 
-        stopTime        = time.time()
-        return args.get("method") + " : time to sort a list of {} elements : {} secondes\n".format(args.get("size"), str(stopTime - startTime))
+        return stopTime - startTime

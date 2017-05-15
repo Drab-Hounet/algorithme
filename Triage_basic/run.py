@@ -1,5 +1,6 @@
 from random import *
 from triage import *
+import matplotlib.pyplot as plt
 import os
 
 #Definition of functions------------------------------
@@ -11,30 +12,58 @@ def createRandomList(size):
     # print (listToSort)
     return listToSort
 
+def createInversedList(size):
+    listToSort = []
+    for i in range(size):
+        listToSort.append(i)
+    listToSort.reverse()
+    return listToSort
+
+def calculate(typeSort, listToSort, **args):
+    listToSortCopy = copy.deepcopy(listToSort)
+    # listToSort1.get()
+    return listToSortCopy.getTimeOfRunFunction(method = typeSort, size = args.get("size"), optimised = args.get("optimised"))
+
+
 #-----------------------------------------------------
 
-# for h in range(1):
-    # i = 100
+listTimeToExecuteSortListByFonctionSort      = []
+listTimeToExecuteSortListBySelection         = []
+listTimeToExecuteSortListByHeap              = []
+listTimeToExecuteSortListByBubble            = []
+listTimeToExecuteSortListByBubbleOptimised   = []
+
+listSize = []
 for i in range(10, 10000, 1000):
+    listSize.append(i)
+    listToSort  = AlgoList(createRandomList(i))
 
-    listToSort1 = AlgoList(createRandomList(i))
-    listToSort2 = copy.deepcopy(listToSort1)
-    listToSort3 = copy.deepcopy(listToSort1)
-    listToSort4 = copy.deepcopy(listToSort1)
-    listToSort5 = copy.deepcopy(listToSort1)
+    listTimeToExecuteSortListByFonctionSort.append(calculate("sortListByFonctionSort", listToSort, size = i ))
+    listTimeToExecuteSortListBySelection.append(calculate("sortListBySelection", listToSort, size = i))
+    listTimeToExecuteSortListByHeap.append(calculate("sortListByHeap", listToSort, size = i))
+    listTimeToExecuteSortListByBubble.append(calculate("sortListByBubble", listToSort, size = i))
+    listTimeToExecuteSortListByBubbleOptimised.append(calculate("sortListByBubble", listToSort, size = i, optimised = True))
 
-    # listToSort1.get()
-    print(listToSort1.getTimeOfRunFunction(method = "sortListByFonctionSort",   size = i))
-    # listToSort2.get()
-    print(listToSort2.getTimeOfRunFunction(method = "sortListBySelection",      size = i))
-    # listToSort3.get()
-    print(listToSort3.getTimeOfRunFunction(method = "sortListByHeap",           size = i))
-    # listToSort4.get()
-    print(listToSort4.getTimeOfRunFunction(method = "sortListByBubble",         size = i , optimised = False))
-    # listToSort4.get()
-    print(listToSort5.getTimeOfRunFunction(method = "sortListByBubble",         size = i , optimised = True))
-    print("\n")
+print(listTimeToExecuteSortListByFonctionSort)
+print(listTimeToExecuteSortListBySelection)
+print(listTimeToExecuteSortListByHeap)
+print(listTimeToExecuteSortListByBubble)
+print(listTimeToExecuteSortListByBubbleOptimised)
 
-os.system("pause")
+
+plt.plot(listSize, listTimeToExecuteSortListByFonctionSort, label="sortListByFonctionSort")
+plt.plot(listSize, listTimeToExecuteSortListBySelection, label="sortListBySelection")
+plt.plot(listSize, listTimeToExecuteSortListByHeap, label="sortListByHeap")
+plt.plot(listSize, listTimeToExecuteSortListByBubble, label="sortListByBubble")
+plt.plot(listSize, listTimeToExecuteSortListByBubbleOptimised, label="sortListByBubbleOptimised")
+
+
+plt.ylabel('Label 1')
+plt.xlabel('Numbers of elements')
+plt.ylabel('Time (s)')
+plt.legend()
+plt.show()
+
+# os.system("pause")
 
 #-----------------------------------------------------
