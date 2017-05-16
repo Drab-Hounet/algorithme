@@ -8,4 +8,8 @@ with open(fname) as fileToCompress:
         textExemple = textExemple + line
 
 compression = CompressionTxt(textExemple)
+# compression = CompressionTxt("coucou amigo o")
 compression.saveCompressedText()
+#
+# compression = CompressionTxt("coucou amigo o")
+# compression.stripText(3)
