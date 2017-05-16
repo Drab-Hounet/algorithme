@@ -1,25 +1,63 @@
 import re
-import operator
 
-textExemple = "Sese ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+class CompressionTxt:
 
+    NUMBER = 3
 
-textSlice = re.findall('...', str.upper(textExemple))
+    def __init__(self, text):
+        self.text = text
+        dictAlph1Char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+        dictAlph1Char = re.findall('.', str.upper(dictAlph1Char))
+        dictAlph2Char = []
+        for i in range(len(dictAlph1Char)):
+            for j in range(len(dictAlph1Char)):
+                dictAlph2Char.append(dictAlph1Char[i] + dictAlph1Char[j])
+        self.dictAlph1Char = dictAlph1Char
+        self.dictAlph2Char = dictAlph2Char
 
-textTriCounted = []
-for el in textSlice:
-    count = 0
-    for i in range(len(textSlice)):
-        if (el == textSlice[i]):
-            count = count + 1
-            if (count > 1):
-                textSlice[i] = 'null'
+    def stripText(self, number):
+        return  re.findall( ".{1," + str(number) + "}", str.upper(self.text))
 
-    if(el != 'null'):
-        textTriCounted.append((el, count))
+    def makeDictSortElementsRepeated(self):
+        listSortElementsRepeated = []
+        listStripped = self.stripText(self.NUMBER)
+        for el in listStripped:
+            count = 0
+            for i in range(len(listStripped)):
+                if (el == listStripped[i]):
+                    count = count + 1
+                    # if (count > 1):
+                    if (count > 1):
+                        listStripped[i] = False
+            if(el):
+                listSortElementsRepeated.append((el, [count, ""]))
+        return dict(listSortElementsRepeated)
 
-textTriCounted = dict(textTriCounted)
-sorted_x = sorted(textTriCounted.items(), key=operator.itemgetter(1))
+    def compression(self):
+        dictSortElementsRepeated = self.makeDictSortElementsRepeated()
+        indexEncoded = 0
+        for key, value in dictSortElementsRepeated.items():
+            # if(value[0] == 1):
+            #     value[1] = dictAlph2Char[indexEncoded]
+            #     indexEncoded +=1
+            if(indexEncoded == len(self.dictAlph2Char)):
+                return "error : not enough keys to compress the file"
+            value[1] = self.dictAlph2Char[indexEncoded]
+            indexEncoded +=1
 
-print (textTriCounted)
-# print(textSlice)
+            textCompressed = self.stripText(self.NUMBER)
+            #convert three characters by 2 characters
+
+            for i in range(len(textCompressed)):
+                 textCompressed[i] = dictSortElementsRepeated[textCompressed[i]][1]
+
+        return (''.join(textCompressed))
+
+    def saveCompressedText(self):
+        with open("textCompressed.txt", "w") as f:
+            f.write(self.compression())
+
+    def decompression(txt):
+        pass
+
+#///////////////////////////////////////////////////////////////////////
