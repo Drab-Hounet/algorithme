@@ -1,15 +1,17 @@
-from compression import *
+from compression        import *
+from decompression      import *
 from tkinter.filedialog import askopenfilename
+from toolbox import *
 
 fname = askopenfilename(filetypes= [("All files", "*.txt")] )
-textExemple = ""
+text = ""
+
 with open(fname) as fileToCompress:
     for line in fileToCompress:
-        textExemple = textExemple + line
+        text = text + line
 
-compression = CompressionTxt(textExemple)
-# compression = CompressionTxt("coucou amigo o")
+compression = CompressionTxt(text)
 compression.saveCompressedText()
-#
-# compression = CompressionTxt("coucou amigo o")
-# compression.stripText(3)
+
+# decompression = DecompressionTxt(text)
+# decompression.saveDeCompressedText()

@@ -1,47 +1,19 @@
 from collections import OrderedDict
-import re
+from toolbox import *
+from keyMaker import *
 
 class CompressionTxt:
 
     def __init__(self, text):
+        self.toolbox = ToolBox()
         self.text = text
-        dictAlph1Char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
-        dictAlph1Char = re.findall('.', str.upper(dictAlph1Char))
-        dictAlph2Char = []
-        for i in range(len(dictAlph1Char)):
-            for j in range(len(dictAlph1Char)):
-                dictAlph2Char.append(dictAlph1Char[i] + dictAlph1Char[j])
-        self.dictAlph1Char = dictAlph1Char
-        self.dictAlph2Char = dictAlph2Char
-
-    def stripText(self):
-        listStripped = []
-        countStrip = 0
-        strip = ""
-        for letter in self.text:
-            if (countStrip == 0):
-                strip = letter
-            elif (countStrip < 2):
-                strip = strip + letter
-            else:
-                countStrip = -1
-                strip = strip + letter
-                listStripped.append(strip)
-            countStrip +=1
-        if (strip != 3):
-            listStripped.append(strip)
-
-        for a in listStripped:
-            if (len(a) < 3):
-                print (a)
-        # print (listStripped)
-        return listStripped
-        # return  re.findall( ".{1," + str(number) + "}", str.upper(self.text))
+        keyMaker = KeyMaker()
+        self.dictAlph2Char = keyMaker.makeKeys()
 
     def makeDictSortElementsRepeated(self):
-        listSortElementsRepeated = []
-        listStripped = self.stripText()
-        # print(listStripped)
+        listElementsRepeatedWithCount = []
+        listTrigramme = []
+        listStripped = self.toolbox.splitText(3, self.text)
         for el in listStripped:
             count = 0
             for i in range(len(listStripped)):
@@ -50,32 +22,26 @@ class CompressionTxt:
                     if (count > 1):
                         listStripped[i] = False
             if(el):
-                listSortElementsRepeated.append((el, [count, ""]))
-        return (OrderedDict(listSortElementsRepeated))
+                listElementsRepeatedWithCount.append((el, [count, ""]))
+                listTrigramme.append(el)
+        return {'dict' : (OrderedDict(listElementsRepeatedWithCount)), 'trigrammes' : listTrigramme}
 
     def compression(self):
-        dictSortElementsRepeated = self.makeDictSortElementsRepeated()
+        dictSortElementsRepeated , listTrigramme = self.makeDictSortElementsRepeated()['dict'] , self.makeDictSortElementsRepeated()['trigrammes']
+
         indexEncoded = 0
         for key, value in dictSortElementsRepeated.items():
-            # if(value[0] == 1):
-            #     value[1] = dictAlph2Char[indexEncoded]
-            #     indexEncoded +=1
             if(indexEncoded == len(self.dictAlph2Char)):
                 return "error : not enough keys to compress the file"
             value[1] = self.dictAlph2Char[indexEncoded]
             indexEncoded +=1
 
-        textCompressed = self.stripText()
+        textCompressed = self.toolbox.splitText(3, self.text)
         for i in range(len(textCompressed)):
              textCompressed[i] = dictSortElementsRepeated[textCompressed[i]][1]
-
-        return (''.join(textCompressed))
+        return format(len(listTrigramme),"08d") + self.toolbox.toString(listTrigramme) + self.toolbox.toString(textCompressed)
 
     def saveCompressedText(self):
-        with open("textCompressed.txt", "w") as f:
-            f.write(self.compression())
-
-    def decompression(txt):
-        pass
+        self.toolbox.saveTxt(self.compression(), "textCompressed")
 
 #///////////////////////////////////////////////////////////////////////
