@@ -3,6 +3,8 @@ import re
 class KeyMaker:
 
     KEYS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    # KEYS = 'abcdef'
+
 
     def makeKeys(self):
         dictAlph1Char = re.findall('.', self.KEYS)
