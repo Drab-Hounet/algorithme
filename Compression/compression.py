@@ -5,10 +5,10 @@ from keyMaker import *
 class CompressionTxt:
 
     def __init__(self, text):
-        self.toolbox = ToolBox()
-        self.text = text
         keyMaker = KeyMaker()
         self.dictAlph2Char = keyMaker.makeKeys()
+        self.toolbox = ToolBox()
+        self.text = text
 
     def makeDictSortElementsRepeated(self):
         listElementsRepeatedWithCount = []
@@ -54,6 +54,6 @@ class CompressionTxt:
         if (not self.saveCompressedText(textCompressed)):
             return {'state' : False, 'message' : "error process to save the result file"}
 
-        return {'state' : True, 'message' : "Compression file are done"}
+        return {'state' : True, 'message' : "Compression file is done"}
 
 #///////////////////////////////////////////////////////////////////////
